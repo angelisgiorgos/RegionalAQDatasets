@@ -11,10 +11,7 @@ and Dimitrios Tzovaras
 This repository contains the data and source code used to produce the results of the paper
 
 ## About
-
-A little bit about this paper, how it came about, and what are the main
-contributions. Also, include a summary figure or graphical abstract for this
-paper.
+![model architecture_process.png](assets%2Fmodel%20architecture_process.png)
 
 ## Abstract
 
