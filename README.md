@@ -1,12 +1,12 @@
 # Regional Datasets for Air Quality Monitoring in Europen Cities
 
 by
-Georgios-Fotios Angelis,
+_Georgios-Fotios Angelis,
 Alexandros Emvoliadis,
 Traianos-Ioannis Theodorou, 
 Alexandros Zamichos,
 Anastasios Drosou
-and Dimitrios Tzovaras
+and Dimitrios Tzovaras_
 
 This repository contains the data and source code used to produce the results of the paper
 
