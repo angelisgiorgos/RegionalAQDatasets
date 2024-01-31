@@ -10,6 +10,8 @@ and Dimitrios Tzovaras_
 
 This repository contains the data and source code used to produce the results of the paper
 
+Data can be downloaded from here: [dataset link](https://zenodo.org/records/10579172)
+
 ## About
 ![model architecture_process.png](assets%2Fmodel%20architecture_process.png)
 
