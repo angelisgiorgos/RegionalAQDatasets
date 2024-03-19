@@ -9,7 +9,7 @@ Anastasios Drosou
 and Dimitrios Tzovaras_
 
 
-Accepted as an oral presentation paper in the IGARSS 2024.
+Accepted as an oral presentation paper in the **IGARSS 2024**.
 
 This repository contains the data and source code used to produce the results of the paper
 
