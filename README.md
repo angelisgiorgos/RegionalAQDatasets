@@ -8,6 +8,9 @@ Alexandros Zamichos,
 Anastasios Drosou
 and Dimitrios Tzovaras_
 
+
+Accepted as an oral presentation paper in the IGARSS 2024.
+
 This repository contains the data and source code used to produce the results of the paper
 
 Data can be downloaded from here: [dataset link](https://zenodo.org/records/10579172)
