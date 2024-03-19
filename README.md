@@ -1,4 +1,4 @@
-# Regional Datasets for Air Quality Monitoring in Europen Cities
+# Regional Datasets for Air Quality Monitoring in European Cities
 
 by
 _Georgios-Fotios Angelis,
