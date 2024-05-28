@@ -1,14 +1,19 @@
-# Regional Datasets for Air Quality Monitoring in Europen Cities
+# Regional Datasets for Air Quality Monitoring in European Cities
 
 by
-Georgios-Fotios Angelis,
+_Georgios-Fotios Angelis,
 Alexandros Emvoliadis,
 Traianos-Ioannis Theodorou, 
 Alexandros Zamichos,
 Anastasios Drosou
-and Dimitrios Tzovaras
+and Dimitrios Tzovaras_
+
+
+Accepted as an oral presentation paper in the **IGARSS 2024**.
 
 This repository contains the data and source code used to produce the results of the paper
+
+Data can be downloaded from here: [dataset link](https://zenodo.org/records/10579172)
 
 ## About
 ![model architecture_process.png](assets%2Fmodel%20architecture_process.png)
