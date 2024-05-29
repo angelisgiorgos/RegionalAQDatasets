@@ -9,20 +9,22 @@ import glob
 import re
 import torch
 from sklearn.preprocessing import StandardScaler
-from utils.timefeatures import time_features
+from src.utils.timefeatures import time_features
 
 
 class Dataset_AirQuality(torch.utils.data.Dataset):
     def __init__(self,
+                 args,
                  root_path,
+                 data_path='athens.csv',
                  flag='train',
                  size=None,
-                 data_path='athens.csv',
                  features='S',
                  target='NO2',
                  station_name=None,
                  scale=True,
                  timeenc=0,
+                 seasonal_patterns=None,
                  freq='h'):
         # size [seq_len, label_len, pred_len]
         if size == None:
@@ -47,6 +49,7 @@ class Dataset_AirQuality(torch.utils.data.Dataset):
 
         self.root_path = root_path
         self.data_path = data_path
+        self.seasonal_patterns = seasonal_patterns
         self.__read_data__()
 
     def __read_data__(self):
@@ -66,8 +69,10 @@ class Dataset_AirQuality(torch.utils.data.Dataset):
         border2 = border2s[self.set_type]
 
         if isinstance(self.target, str):
+            df_raw[self.target] = df_raw[self.target].interpolate()
             df_data = df_raw[[self.target]]  # target column
         else:
+            df_raw[self.target] = df_raw[self.target].interpolate()
             df_data = df_raw[self.target]  # target column
 
         # scale data by the scaler that fits training data
