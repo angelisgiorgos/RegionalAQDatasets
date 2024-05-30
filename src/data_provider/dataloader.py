@@ -40,6 +40,7 @@ class Dataset_AirQuality(torch.utils.data.Dataset):
         type_map = {'train': 0, 'val': 1, 'test': 2}
         self.set_type = type_map[flag]
 
+        self.args = args
         self.features = features
         self.target = target
         self.scale = scale
@@ -68,12 +69,20 @@ class Dataset_AirQuality(torch.utils.data.Dataset):
         border1 = border1s[self.set_type]
         border2 = border2s[self.set_type]
 
-        if isinstance(self.target, str):
+        if self.features == 'M':
             df_raw[self.target] = df_raw[self.target].interpolate()
-            df_data = df_raw[[self.target]]  # target column
-        else:
-            df_raw[self.target] = df_raw[self.target].interpolate()
-            df_data = df_raw[self.target]  # target column
+            df_data = df_raw[self.target]
+        elif self.features == 'MS':
+            if isinstance(self.target, str):
+                cols = [self.target]
+            else:
+                cols = self.target
+            cols.extend(self.args.covariates)
+            df_raw[cols] = df_raw[cols].interpolate()
+            df_data = df_raw[cols]
+        elif self.features == 'S':
+            df_data = df_raw[[self.target]].interpolate()
+
 
         # scale data by the scaler that fits training data
         if self.scale:
@@ -116,7 +125,12 @@ class Dataset_AirQuality(torch.utils.data.Dataset):
 
         # data_x and data_y are same copy of a certain part of data
         self.data_x = data[border1:border2]
-        self.data_y = data[border1:border2]
+        if self.features == "MS":
+            self.data_y = data[border1:border2, 0]
+            self.data_y = np.expand_dims(self.data_y, axis=1)
+            print(self.data_x.shape, self.data_y.shape)
+        else:
+            self.data_y = data[border1:border2]
         self.data_stamp = data_stamp
 
     def __getitem__(self, index):
