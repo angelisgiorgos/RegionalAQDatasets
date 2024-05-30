@@ -1,4 +1,4 @@
-from data_provider.data_factory import data_provider
+from src.data_provider.data_factory import data_provider
 from src.exp.exp_basic import Exp_Basic
 from src.utils.tools import EarlyStopping, adjust_learning_rate, visual
 from src.utils.metrics import metric
@@ -172,7 +172,8 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 print("Early stopping")
                 break
 
-            adjust_learning_rate(model_optim, epoch + 1, self.args)
+            if self.args.start_adjusting == epoch:
+                adjust_learning_rate(model_optim, epoch + 1, self.args)
 
         best_model_path = path + '/' + 'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
@@ -180,6 +181,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         return self.model
 
     def test(self, setting, test=0):
+        self.args.batch_size = 1
         test_data, test_loader = self._get_data(flag='test')
         if test:
             print('loading model')
