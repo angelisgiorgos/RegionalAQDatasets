@@ -1,5 +1,5 @@
 from torch.utils.data import DataLoader
-from src.data_provider.dataloader import Dataset_AirQuality
+from data_provider.dataloader import Dataset_AirQuality
 
 data_dict = {
     'air': Dataset_AirQuality,

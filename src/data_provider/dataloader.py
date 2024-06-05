@@ -3,13 +3,10 @@ import warnings
 warnings.filterwarnings('ignore')
 
 import os
-import numpy as np
 import pandas as pd
-import glob
-import re
 import torch
 from sklearn.preprocessing import StandardScaler
-from src.utils.timefeatures import time_features
+from utils.timefeatures import time_features
 
 
 class Dataset_AirQuality(torch.utils.data.Dataset):
@@ -54,7 +51,6 @@ class Dataset_AirQuality(torch.utils.data.Dataset):
         self.__read_data__()
 
     def __read_data__(self):
-        self.scaler = StandardScaler()
         df_raw = pd.read_csv(os.path.join(self.root_path,
                                           self.data_path))
 
@@ -69,23 +65,17 @@ class Dataset_AirQuality(torch.utils.data.Dataset):
         border1 = border1s[self.set_type]
         border2 = border2s[self.set_type]
 
-        if self.features == 'M':
-            df_raw[self.target] = df_raw[self.target].interpolate()
-            df_data = df_raw[self.target]
-        elif self.features == 'MS':
-            if isinstance(self.target, str):
-                cols = [self.target]
-            else:
-                cols = self.target
-            cols.extend(self.args.covariates)
+        if self.features == 'MS' or self.features == 'M':
+            cols = [str(self.target)]
+            cols = cols + self.args.covariates
             df_raw[cols] = df_raw[cols].interpolate()
             df_data = df_raw[cols]
         elif self.features == 'S':
             df_data = df_raw[[self.target]].interpolate()
 
-
         # scale data by the scaler that fits training data
         if self.scale:
+            self.scaler = StandardScaler()
             train_data = df_data[border1s[0]:border2s[0]]
             # train_data.values: turn pandas DataFrame into 2D numpy
             self.scaler.fit(train_data.values)
@@ -124,13 +114,7 @@ class Dataset_AirQuality(torch.utils.data.Dataset):
             data_stamp = data_stamp.transpose(1, 0)
 
         # data_x and data_y are same copy of a certain part of data
-        self.data_x = data[border1:border2]
-        if self.features == "MS":
-            self.data_y = data[border1:border2, 0]
-            self.data_y = np.expand_dims(self.data_y, axis=1)
-            print(self.data_x.shape, self.data_y.shape)
-        else:
-            self.data_y = data[border1:border2]
+        self.data = data[border1:border2]
         self.data_stamp = data_stamp
 
     def __getitem__(self, index):
@@ -139,15 +123,15 @@ class Dataset_AirQuality(torch.utils.data.Dataset):
         r_begin = s_end - self.label_len
         r_end = r_begin + self.label_len + self.pred_len
 
-        seq_x = self.data_x[s_begin:s_end]
-        seq_y = self.data_y[r_begin:r_end]
+        seq_x = self.data[s_begin:s_end]
+        seq_y = self.data[r_begin:r_end]
         seq_x_mark = self.data_stamp[s_begin:s_end]
         seq_y_mark = self.data_stamp[r_begin:r_end]
 
         return seq_x, seq_y, seq_x_mark, seq_y_mark
 
     def __len__(self):
-        return len(self.data_x) - self.seq_len - self.pred_len + 1
+        return len(self.data) - self.seq_len - self.pred_len + 1
 
     def inverse_transform(self, data):
         return self.scaler.inverse_transform(data)
