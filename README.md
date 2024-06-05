@@ -15,10 +15,11 @@ This repository contains the data and source code used to produce the results of
 
 Data can be downloaded from here: [dataset link](https://zenodo.org/records/10579172)
 
-## About
-![model architecture_process.png](assets%2Fmodel%20architecture_process.png)
+## Overview
+![model architecture_process.png](assets/all_stations.png)
 
-## Abstract
+
+### Abstract
 
 The primary environmental health threat in the WHO European Region is air pollution, impacting the daily health and
 well-being of its citizens significantly. To effectively understand the impact, and dynamics of air quality a detailed investigation of different environmental, weather, and land cover
@@ -31,6 +32,45 @@ with an hourly temporal resolution and a spatial resolution of
 released aiming to provide a solid foundation for researchers,
 analysts, and practitioners to conduct in-depth analyses of air
 pollution dynamics.
+
+### Motivation
+Detailed monitoring of pollutant variables provides valuable insights into human activities impacting air quality and pollution sources. Advancements in sensor technologies, satellites, UAVs, and data analysis tools have enhanced the quality and quantity of air quality data, enabling better decision-making and analysis. However, creating air quality datasets is time-consuming, requiring significant effort. To address these challenges, we aggregate data from diverse sources to provide high-quality air pollution data enriched with contextual information.
+ 
+### Approach
+![model architecture_process.png](assets%2Fmodel%20architecture_process.png)
+
+### Contributions
+In summary we make the following contributions:
+- We have collected and aligned diverse air quality data from three
+European cities, offering high temporal accuracy (onehour resolution) for detailed analysis and low spatial
+resolution for regional monitoring.
+- We have enhanced data through anomaly detection and imputation, producing three ready-to-use datasets for air quality
+modeling.
+- We have integrated land usage features, revealing insights into
+the link between urban development, land use, and air
+quality.
+
+
+## File Download Script
+
+This repository contains a bash script to download three CSV files and move them into a `data` directory.
+
+### Files
+
+- [athens.csv](https://zenodo.org/record/11220965/files/athens.csv)
+- [ancona.csv](https://zenodo.org/record/11220965/files/ancona.csv)
+- [zaragoza.csv](https://zenodo.org/record/11220965/files/zaragoza.csv)
+
+### Script Description
+
+The provided bash script:
+1. Prints a message indicating that downloads are starting.
+2. Downloads the three specified CSV files.
+3. Creates a `data` directory if it doesn't already exist.
+4. Moves the downloaded files into the `data` directory.
+5. Prints a message indicating that the downloads and file moves are complete.
+
+[//]: # (### Usage)
 
 ## License
 
