@@ -51,6 +51,7 @@ coverage.xml
 .pytest_cache/
 cover/
 
+
 # Translations
 *.mo
 *.pot
@@ -170,3 +171,5 @@ results
 test_results
 result_long_term_forecast.txt
 checkpoints
+
+data/
