@@ -17,7 +17,6 @@ class Model(nn.Module):
 
     def __init__(self, configs):
         super(Model, self).__init__()
-        self.configs = configs
         self.task_name = configs.task_name
         self.seq_len = configs.seq_len
         self.label_len = configs.label_len
@@ -97,19 +96,12 @@ class Model(nn.Module):
         # decoder input
         trend_init = torch.cat(
             [trend_init[:, -self.label_len:, :], mean], dim=1)
-        if self.configs.features == "MS":
-            zeros_enc = torch.zeros([x_enc.shape[0], self.pred_len,
-                             x_enc.shape[2]], device=x_enc.device)
-        else:
-            zeros_enc = zeros
         seasonal_init = torch.cat(
-            [seasonal_init[:, -self.label_len:, :], zeros_enc], dim=1)
+            [seasonal_init[:, -self.label_len:, :], zeros], dim=1)
         # enc
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
         enc_out, attns = self.encoder(enc_out, attn_mask=None)
         # dec
-        if self.configs.features == "MS":
-            seasonal_init = seasonal_init[:, :, 0].unsqueeze(2)
         dec_out = self.dec_embedding(seasonal_init, x_mark_dec)
         seasonal_part, trend_part = self.decoder(dec_out, enc_out, x_mask=None, cross_mask=None,
                                                  trend=trend_init)
