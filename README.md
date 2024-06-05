@@ -80,3 +80,8 @@ warranty, so long as you provide attribution to the authors. See
 `LICENSE-MIT.txt` for the full license text.
 
 [cc-by]: https://creativecommons.org/licenses/by/4.0/
+
+
+## Acknowledgments
+We acknowledge [Time-Series-Library](https://github.com/thuml/Time-Series-Library) for 
+supporting training & validation codes.
