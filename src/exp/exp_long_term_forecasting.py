@@ -1,7 +1,7 @@
-from src.data_provider.data_factory import data_provider
-from src.exp.exp_basic import Exp_Basic
-from src.utils.tools import EarlyStopping, adjust_learning_rate, visual
-from src.utils.metrics import metric
+from data_provider.data_factory import data_provider
+from exp.exp_basic import Exp_Basic
+from utils.tools import EarlyStopping, adjust_learning_rate, visual
+from utils.metrics import metric
 import torch
 import torch.nn as nn
 from torch import optim
@@ -9,7 +9,7 @@ import os
 import time
 import warnings
 import numpy as np
-from src.utils.dtw_metric import dtw, accelerated_dtw
+from utils.dtw_metric import dtw, accelerated_dtw
 
 warnings.filterwarnings('ignore')
 
@@ -30,7 +30,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         return data_set, data_loader
 
     def _select_optimizer(self):
-        model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
+        model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate, weight_decay=1e-4)
         return model_optim
 
     def _select_criterion(self):
@@ -64,9 +64,9 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
                     else:
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-                f_dim = -1 if self.args.features == 'MS' else 0
-                outputs = outputs[:, -self.args.pred_len:, f_dim:]
-                batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
+                f_dim = 1 if self.args.features == 'MS' else 0
+                outputs = outputs[:, -self.args.pred_len:, :f_dim]
+                batch_y = batch_y[:, -self.args.pred_len:, :f_dim].to(self.device)
 
                 pred = outputs.detach().cpu()
                 true = batch_y.detach().cpu()
@@ -125,9 +125,9 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                         else:
                             outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
 
-                        f_dim = -1 if self.args.features == 'MS' else 0
-                        outputs = outputs[:, -self.args.pred_len:, f_dim:]
-                        batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
+                        f_dim = 1 if self.args.features == 'MS' else 0
+                        outputs = outputs[:, -self.args.pred_len:, :f_dim]
+                        batch_y = batch_y[:, -self.args.pred_len:, :f_dim].to(self.device)
                         loss = criterion(outputs, batch_y)
                         train_loss.append(loss.item())
                 else:
@@ -135,10 +135,9 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
                     else:
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-
-                    f_dim = -1 if self.args.features == 'MS' else 0
-                    outputs = outputs[:, -self.args.pred_len:, f_dim:]
-                    batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
+                    f_dim = 1 if self.args.features == 'MS' else 0
+                    outputs = outputs[:, -self.args.pred_len:, :f_dim]
+                    batch_y = batch_y[:, -self.args.pred_len:, :f_dim].to(self.device)
                     loss = criterion(outputs, batch_y)
                     train_loss.append(loss.item())
 
@@ -172,7 +171,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 print("Early stopping")
                 break
 
-            if self.args.start_adjusting == epoch:
+            if self.args.start_adjusting < epoch:
                 adjust_learning_rate(model_optim, epoch + 1, self.args)
 
         best_model_path = path + '/' + 'checkpoint.pth'
@@ -221,7 +220,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                     else:
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
 
-                f_dim = -1 if self.args.features == 'MS' else 0
+                f_dim = 1 if self.args.features == 'MS' else 0
                 outputs = outputs[:, -self.args.pred_len:, :]
                 batch_y = batch_y[:, -self.args.pred_len:, :].to(self.device)
                 outputs = outputs.detach().cpu().numpy()
@@ -231,8 +230,8 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                     outputs = test_data.inverse_transform(outputs.squeeze(0)).reshape(shape)
                     batch_y = test_data.inverse_transform(batch_y.squeeze(0)).reshape(shape)
 
-                outputs = outputs[:, :, f_dim:]
-                batch_y = batch_y[:, :, f_dim:]
+                outputs = outputs[:, :, :f_dim]
+                batch_y = batch_y[:, :, :f_dim]
 
                 pred = outputs
                 true = batch_y

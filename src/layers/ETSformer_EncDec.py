@@ -142,7 +142,7 @@ class FourierLayer(nn.Module):
     def forward(self, x):
         """x: (b, t, d)"""
         b, t, d = x.shape
-        x_freq = fft.rfft(x, dim=1)
+        x_freq = fft.rfft(x, dim=1).to(x.device)
 
         if t % 2 == 0:
             x_freq = x_freq[:, self.low_freq:-1]
@@ -153,7 +153,8 @@ class FourierLayer(nn.Module):
 
         x_freq, index_tuple = self.topk_freq(x_freq)
         f = repeat(f, 'f -> b f d', b=x_freq.size(0), d=x_freq.size(2))
-        f = rearrange(f[index_tuple], 'b f d -> b f () d').to(x_freq.device)
+        f = f.to(x_freq.device)
+        f = rearrange(f[index_tuple], 'b f d -> b f () d')
 
         return self.extrapolate(x_freq, f, t)
 

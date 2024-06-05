@@ -6,26 +6,28 @@ import torch.nn.functional as F
 
 # from mamba_ssm import Mamba
 
-from src.layers.Embed import DataEmbedding
+from layers.Embed import DataEmbedding
+
 
 class Model(nn.Module):
-    
+
     def __init__(self, configs):
         super(Model, self).__init__()
         self.task_name = configs.task_name
         self.pred_len = configs.pred_len
 
         self.d_inner = configs.d_model * configs.expand
-        self.dt_rank = math.ceil(configs.d_model / 16) # TODO implement "auto"
-        
-        self.embedding = DataEmbedding(configs.enc_in, configs.d_model, configs.embed, configs.freq, configs.dropout)
+        self.dt_rank = math.ceil(configs.d_model / 16)  # TODO implement "auto"
+
+        self.embedding = DataEmbedding(configs.enc_in, configs.d_model, configs.embed, configs.freq,
+                                       configs.dropout)
 
         self.mamba = Mamba(
-            d_model = configs.d_model,
-            d_state = configs.d_ff,
-            d_conv = configs.d_conv,
-            expand = configs.expand,
-        )
+            d_model=configs.d_model,
+            d_state=configs.d_ff,
+            d_conv=configs.d_conv,
+            expand=configs.expand,
+            )
 
         self.out_layer = nn.Linear(configs.d_model, configs.c_out, bias=False)
 

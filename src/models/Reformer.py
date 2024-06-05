@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from src.layers.Transformer_EncDec import Encoder, EncoderLayer
-from src.layers.SelfAttention_Family import ReformerLayer
-from src.layers.Embed import DataEmbedding
+from layers.Transformer_EncDec import Encoder, EncoderLayer
+from layers.SelfAttention_Family import ReformerLayer
+from layers.Embed import DataEmbedding
 
 
 class Model(nn.Module):

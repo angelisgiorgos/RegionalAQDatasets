@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange, repeat
-from src.layers.Crossformer_EncDec import scale_block, Encoder, Decoder, DecoderLayer
-from src.layers.Embed import PatchEmbedding
-from src.layers.SelfAttention_Family import AttentionLayer, FullAttention, TwoStageAttentionLayer
-from src.models.PatchTST import FlattenHead
+from layers.Crossformer_EncDec import scale_block, Encoder, Decoder, DecoderLayer
+from layers.Embed import PatchEmbedding
+from layers.SelfAttention_Family import AttentionLayer, FullAttention, TwoStageAttentionLayer
+from models.PatchTST import FlattenHead
 
 from math import ceil
 
@@ -80,6 +80,10 @@ class Model(nn.Module):
             self.dropout = nn.Dropout(configs.dropout)
             self.projection = nn.Linear(
                 self.head_nf * configs.enc_in, configs.num_class)
+        elif self.task_name == 'long_term_forecast':
+            self.projection = nn.Linear(
+                configs.enc_in, configs.c_out
+                )
 
     def forecast(self, x_enc, x_mark_enc, x_dec, x_mark_dec):
         # embedding
@@ -92,6 +96,7 @@ class Model(nn.Module):
         dec_in = repeat(self.dec_pos_embedding, 'b ts_d l d -> (repeat b) ts_d l d',
                         repeat=x_enc.shape[0])
         dec_out = self.decoder(dec_in, enc_out)
+        dec_out = self.projection(dec_out)
         return dec_out
 
     def imputation(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask):
