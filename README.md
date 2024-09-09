@@ -86,3 +86,27 @@ warranty, so long as you provide attribution to the authors. See
 ## Acknowledgments
 We acknowledge [Time-Series-Library](https://github.com/thuml/Time-Series-Library) for 
 supporting training & validation codes.
+
+
+
+## BibTeX Citation
+
+If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following citations:
+
+```
+@INPROCEEDINGS{10640879,
+  author={Angelis, G.- F. and Emvoliadis, A. and Theodorou, T.-I. and Zamichos, A. and Drosou, A. and Tzovaras, D.},
+  booktitle={IGARSS 2024 - 2024 IEEE International Geoscience and Remote Sensing Symposium}, 
+  title={Regional Datasets for Air Quality Monitoring in European Cities}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={6875-6880},
+  keywords={Urban areas;Europe;Land surface;Air pollution;Solids;Spatiotemporal phenomena;Pollution measurement;Air pollution;datasets;temporal;spatiotemporal},
+  doi={10.1109/IGARSS53475.2024.10640879}
+
+
+```
+
+## Funding
+This research was supported by grants from Horizon 2020, the European Union’s Programme for Research and Innovation under Grant Agreement No. 101037648 - SOCIO-BEE.
