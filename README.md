@@ -91,7 +91,7 @@ supporting training & validation codes.
 
 ## BibTeX Citation
 
-If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following citations:
+If you use our datasets in a scientific publication, we would appreciate using the following citations:
 
 ```
 @INPROCEEDINGS{10640879,
